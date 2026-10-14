@@ -4,7 +4,7 @@
 ### Team Members:
 - Sydney Wyman
 - Caleb Sarmiento
--
+- Layne Krantosky
 -
 
 ### Project Purpose:
