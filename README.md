@@ -1,13 +1,14 @@
 # Isopods_CS1530
 ### Team Name: Isopods
 
-### Team Members:
+### Team Members
 - Sydney Wyman
 - Caleb Sarmiento
 - Layne Krantosky
 -
 
-### Project Purpose:
-The purpose of our project is to provide a tool that allows users to keep track of when their food is going to expire and help them decide how they can use upcoming expiring foods so it doesn't go to waste. This could be used by a single person or in a shared household and allows users to plan their meals better.
+### Project Purpose
+The purpose of our project is to build a system that lets users keep track of expiration dates for their food to help them reduce waste. Users will log food items in the app and enter or scan the expiration date to attach alongside the entry. The system will store each logged food item and notify the user when expiration dates are near and when they are expired. By providing this functionality, our system will solve the problem of keeping track of many expiration dates to avoid waste.
 
-what you plan to build your system in, and one thing you are unsure about
+### Implementation Details
+We plan to build our system in **_TBD_**
