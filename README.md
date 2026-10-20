@@ -12,4 +12,4 @@ The purpose of our project is to build a system that lets users keep track of ex
 
 ### Implementation Details
 - We plan to build our system using a structured query language like SQLite for local database management and an SDK like Flutter.
-- This is not set in stone, as we aren't too experienced with mobile app development.
+ - We're unsure if this is set in stone because we're not too experienced with mobile app development.
