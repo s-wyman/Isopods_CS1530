@@ -74,7 +74,7 @@ MVP: yes
 ## US7: Enter Expiration Date Using an Image
 As a user, I want to take a photo of a food item's printed expiration date so that I can record the date without entering it manually.
 FR: FR4
-Priority: Could
+Priority: Should
 MVP: no
 
 - [ ] When adding a food item, the user can take a photo or upload an image showing the printed expiration date.
