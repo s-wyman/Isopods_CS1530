@@ -40,7 +40,7 @@ MVP: yes
 ## US4: Filter Food Items by Food Type
 As a user, I want to filter my inventory by food type so that I can find items in a particular category.
 FR: FR10
-Priority: Must
+Priority: Should
 MVP: yes
 
 - [ ] The user can select a food type, such as meat, produce, dairy, or grains as a filter.
@@ -51,7 +51,7 @@ MVP: yes
 ## US5: Filter Food Items by Storage Location
 As a user, I want to filter my inventory by storage location so that I can find items stored in a particular place.
 FR: FR6
-Priority: Must
+Priority: Should
 MVP: yes
 
 - [ ] The user can select a storage location, such as refrigerator, freezer, or pantry as a filter.
@@ -97,7 +97,7 @@ MVP: yes
 ## US9: Sort Food Items by Expiration Date
 As a user, I want to sort my food inventory by expiration date so that I can decide what to eat first.
 FR: FR7
-Priority: Must
+Priority: Should
 MVP: yes
 
 - [ ] The user can sort their inventory in ascending order to display items with the earliest expiration dates first.
