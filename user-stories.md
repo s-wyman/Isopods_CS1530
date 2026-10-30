@@ -3,14 +3,13 @@ Users can add, view, update, delete, and organize food items in their inventory.
 
 ## US1: Add Food Item
 As a user, I want to add a food item to my inventory so that I can keep track of the food I have at home.
-FR: FR1, FR4, FR11
+FR: FR1, FR4
 Priority: Must
 MVP: yes
 
-- [ ] The form to add a new food item includes required fields for the item's name, food type, storage location, and expiration date, with the option to attach an image.
+- [ ] The form to add a new food item includes required fields for the item's name, food type, storage location, and expiration date.
 - [ ] The system prevents submission when a required field is missing, highlights the invalid fields, and preserves valid ones.
 - [ ] After the user submits, the new item appears in the inventory list.
-- [ ] If the user doesn't upload an image, the food item uses a default placeholder when displayed.
 
 ## US2: View Food Inventory
 As a user, I want to view my logged food items so that I know what food I currently have available.
@@ -47,6 +46,7 @@ MVP: yes
 - [ ] When a filter is active, only items belonging to that category are displayed.
 - [ ] If no items match the selected food type, the system displays a message that no results were found.
 - [ ] The user can clear the filter to view items of all food types again.
+- [ ] The filtered list displays within 2 seconds when the user has up to 100 items.
 
 ## US5: Filter Food Items by Storage Location
 As a user, I want to filter my inventory by storage location so that I can find items stored in a particular place.
@@ -58,6 +58,29 @@ MVP: yes
 - [ ] When a filter is active, only items assigned to that location are displayed.
 - [ ] If no items match the selected location, the system displays a message that no results were found.
 - [ ] The user can clear the filter to view items from all storage locations again.
+- [ ] The filtered list displays within 2 seconds when the user has up to 100 items.
+
+## US11: Attach Image to Food Item
+As a user, I want to attach a photo to a food item so that I can recognize it quickly in my inventory.
+FR: FR11
+Priority: Could
+MVP: no
+
+- [ ] When adding or editing a food item, the user can take a photo or upload an image.
+- [ ] The image is shown with the item in the inventory list.
+- [ ] If no image is attached, the item shows a default placeholder.
+
+## US12: Share an Inventory
+As a user, I want to share my inventory with my roommate so that we can both track the food we have together.
+FR: FR12
+Priority: Could
+MVP: no
+
+- [ ] The owner can invite another user to their inventory.
+- [ ] All users of a shared inventory see the same food items.
+- [ ] When any user adds, edits, or deletes an item, the change appears for every user.
+- [ ] Each user receives their own daily expiration notification for the shared items.
+- [ ] Users who haven't been given access can't view the inventory.
 
 # E2: Expiration Tracking
 Users can record, edit, sort, and receive reminders about food expiration dates to help reduce waste.
@@ -103,6 +126,7 @@ MVP: yes
 - [ ] The user can sort their inventory in ascending order to display items with the earliest expiration dates first.
 - [ ] The user can sort their inventory in descending order to display items with the latest expiration dates first.
 - [ ] Sorting changes the display order without modifying any stored information.
+- [ ] The sorted list displays within 2 seconds when the user has up to 100 items.
 
 ## US10: Receive Upcoming Expiration Notifications
 As a user, I want reminders when my food is approaching its expiration date so that I can use it before then.
@@ -110,7 +134,23 @@ FR: FR9
 Priority: Must
 MVP: yes
 
-- [ ] When one or more food items expire within three days, the user receives a single push notification listing them.
+- [ ] When one or more food items expire within the user's chosen time frame(s), the user receives a single push notification listing them.
 - [ ] The notification identifies each expiring food item and its expiration date.
-- [ ] If no food items expire within three days, no notification is sent.
+- [ ] If no food items expire within the user's chosen time frame(s), no notification is sent.
 - [ ] The system sends no more than one expiration summary notification per day.
+- [ ] Notifications are delivered within 5 minutes of their scheduled time.
+- [ ] The user can choose how many days before expiration they are notified, defaults to 3.
+
+# E3: Recipe Suggestions
+Users can view recipes that use the food in their inventory.
+
+## US13: View Recipe Suggestions
+As a user, I want to see recipes using the food I have so that I can use items before they expire.
+FR: FR8
+Priority: Could
+MVP: no
+
+- [ ] The user can open a recipe tab that lists recipes using at least one of their logged food items.
+- [ ] Each recipe shows its name, instructions, and each ingredient with its quantity and units.
+- [ ] Each recipe shows the soonest expiration date among the logged items it uses.
+- [ ] If no recipes match the user's items, the system shows a message saying no recipes were found.
