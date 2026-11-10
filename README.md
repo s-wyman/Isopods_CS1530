@@ -1,6 +1,6 @@
 # Isopods
 
-**Team Members:**
+### Team Members:
 
 - Sydney Wyman
 - Caleb Sarmiento
