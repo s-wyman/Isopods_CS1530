@@ -28,5 +28,5 @@ The purpose of our project is to build a system that lets users keep track of ex
 2. In a terminal of your choice, navigate to Isopods_CS1530\backend\src
 3. Run this command if you are on PowerShell: `javac (Get-ChildItem -Recurse -Filter "*.java" | Select-Object -ExpandProperty FullName)` or this command if you are on bash: `javac -d bin src/**/*.java`
 4. Run this command: `java main/java/isopods/App`
-5. Use add <name> <food type> <storage location> <expiration year> <expiration month> <expiration day> <path to image (this is optional)> to add FoodItem objects to the database.
+5. Use `add <name> <food type> <storage location> <expiration year> <expiration month> <expiration day> <path to image (this is optional)>` to add FoodItem objects to the database.
 6. Use view to see a list of all FoodItem objects.
