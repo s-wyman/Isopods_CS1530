@@ -22,3 +22,11 @@ The purpose of our project is to build a system that lets users keep track of ex
 | Database                 | PostgreSQL                            | Serves as our ‘FoodInventoryDatabase’ subsystem, giving us one central database so data stays consistent. Since the client can only reach it through the backend, it supports DG3 (Security).                                                                                    |
 | APIs / External Services | Expo Push Notification Service        | Expo’s push notification service allows us to easily send expiration reminders to both iOS and Android.                                                                                                                                                                          |
 | Deployment / Housing     | Railway                               | The backend server and database can be hosted on a free tier, so the whole team can access the deployment. Expo already handles building the mobile app for us.                                                                                                                  |
+
+### Installation Instructions
+1. Clone this repository.
+2. In a terminal of your choice, navigate to Isopods_CS1530\backend\src
+3. Run this command if you are on PowerShell: `javac (Get-ChildItem -Recurse -Filter "*.java" | Select-Object -ExpandProperty FullName)` or this command if you are on bash: `javac -d bin src/**/*.java`
+4. Run this command: `java main/java/isopods/App`
+5. Use add <name> <food type> <storage location> <expiration year> <expiration month> <expiration day> <path to image (this is optional)> to add FoodItem objects to the database.
+6. Use view to see a list of all FoodItem objects.
