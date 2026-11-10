@@ -1,7 +1,7 @@
-# Isopods_CS1530
-## Team Name: Isopods
+# Isopods
 
-## Team Members
+**Team Members:**
+
 - Sydney Wyman
 - Caleb Sarmiento
 - Layne Krantosky
@@ -22,6 +22,15 @@ The purpose of our project is to build a system that lets users keep track of ex
 | Database                 | PostgreSQL                            | Serves as our ‘FoodInventoryDatabase’ subsystem, giving us one central database so data stays consistent. Since the client can only reach it through the backend, it supports DG3 (Security).                                                                                    |
 | APIs / External Services | Expo Push Notification Service        | Expo’s push notification service allows us to easily send expiration reminders to both iOS and Android.                                                                                                                                                                          |
 | Deployment / Housing     | Railway                               | The backend server and database can be hosted on a free tier, so the whole team can access the deployment. Expo already handles building the mobile app for us.                                                                                                                  |
+
+## Subsystem Decomposition
+
+<img width="1123" height="631" alt="image" src="https://github.com/user-attachments/assets/b27c5b5b-0c01-41b4-9652-ed94e48c5a4a" />
+
+## Deployment Diagram
+
+TODO
+
 
 ### Installation Instructions
 1. Clone this repository.
