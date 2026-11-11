@@ -52,3 +52,7 @@ The purpose of our project is to build a system that lets users keep track of ex
 ## Current Functionality
 
 Currently, the system lets users use an `add` command in the terminal to add a food item into the database. It also lets users use the `view` command to view the current database entries. The UI is not functional.
+
+## Generative AI Usage Disclaimer
+
+We used Generative AI to check our Deployment Diagram.
