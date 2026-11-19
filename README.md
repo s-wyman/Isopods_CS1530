@@ -49,9 +49,24 @@ The purpose of our project is to build a system that lets users keep track of ex
 5. Use `add <name> <food type> <storage location> <expiration year> <expiration month> <expiration day> <path to image (this is optional)>` to add FoodItem objects to the database.
 6. Use view to see a list of all FoodItem objects.
 
+### Running the mobile app
+1. Start the backend (steps above) and leave it running.
+2. In `mobile/`, create a file named `.env.local` containing
+   `EXPO_PUBLIC_API_URL=http://<your computer's IP>:7070`.
+   The IP is shown in Expo's `exp://...` line. Your phone must be on the same Wi-Fi.
+3. In `mobile/`, run `npm install`, then `npx expo start`, and scan the QR code with the Expo Go app.
+
 ## Current Functionality
 
-Currently, the system lets users use an `add` command in the terminal to add a food item into the database. It also lets users use the `view` command to view the current database entries. The UI is not functional.
+**View Food Inventory (US2):** The app's home screen lists every saved food item with its
+name, food type, storage location, expiration date, and a placeholder image. Each item shows
+a colored badge: Fresh (green), Expiring Soon (orange, within 3 days), or Expired (red).
+Pull down to refresh the list. If the inventory is empty, the screen shows an "Add food" button
+(adding from the app is coming with US1).
+
+**Adding food (temporary):** Until US1 is built, food items are added in the backend terminal
+with the `add` command. Item names can't contain spaces (use `greek-yogurt`), and items are
+stored in memory, so they're cleared when the backend stops.
 
 ## Generative AI Usage Disclaimer
 
