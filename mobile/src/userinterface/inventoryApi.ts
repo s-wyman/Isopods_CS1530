@@ -11,8 +11,9 @@ export type FoodItemSummary = {
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:7070';
 
-export async function fetchFoodItems(): Promise<FoodItemSummary[]> {
-    const response = await fetch(`${API_URL}/api/items`);
+export async function fetchFoodItems(foodTypes: string[] = []): Promise<FoodItemSummary[]> {
+    const query = foodTypes.length > 0 ? `?foodType=${encodeURIComponent(foodTypes.join(','))}` : '';
+    const response = await fetch(`${API_URL}/api/items${query}`);
     if (!response.ok) {
         throw new Error(`Failed to fetch food items: ${response.statusText}`);
     }

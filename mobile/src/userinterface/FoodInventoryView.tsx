@@ -8,33 +8,40 @@ import {
     View,
 } from 'react-native';
 
+import FilterPanel from './FilterPanel';
+import { FOOD_TYPES, labelFor } from './filterOptions';
 import { ExpirationStatus, FoodItemSummary, fetchFoodItems } from './inventoryApi';
 
+// Text, icon, and color for each status.
 const STATUS_DISPLAY: Record<ExpirationStatus, { label: string; icon: string; color: string }> = {
-  FRESH: { label: 'Fresh', icon: '✓', color: '#2E7D32' },
-  EXPIRING_SOON: { label: 'Expiring Soon', icon: '!', color: '#DD843C' },
-  EXPIRED: { label: 'Expired', icon: '✕', color: '#C62828' },
+    FRESH: { label: 'Fresh', icon: '✓', color: '#2E7D32' },
+    EXPIRING_SOON: { label: 'Expiring Soon', icon: '!', color: '#DD843C' },
+    EXPIRED: { label: 'Expired', icon: '✕', color: '#C62828' },
 };
 
 export default function FoodInventoryView() {
     const [items, setItems] = useState<FoodItemSummary[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [refreshing, setRefreshing] = useState<boolean>(false);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [foodTypes, setFoodTypes] = useState<string[]>([]);
+    const [filterOpen, setFilterOpen] = useState(false);
 
     const loadItems = useCallback(async () => {
         try {
-            setItems(await fetchFoodItems());
+            setItems(await fetchFoodItems(foodTypes));
             setError(null);
-        } catch (err) {
+        } catch {
             setError("Couldn't reach the server. Check that the backend is running.");
         }
-    }, []);
+    }, [foodTypes]);
 
+    // Load the list when the screen opens and again whenever the filter changes.
     useEffect(() => {
         loadItems().finally(() => setLoading(false));
     }, [loadItems]);
 
+    // Pull down to refresh.
     const onRefresh = async () => {
         setRefreshing(true);
         await loadItems();
@@ -49,9 +56,25 @@ export default function FoodInventoryView() {
         );
     }
 
+    const filterActive = foodTypes.length > 0;
+
     return (
         <View style={styles.screen}>
             <Text style={styles.title}>My Food</Text>
+
+            <View style={styles.filterBar}>
+                <Pressable style={[styles.filterButton, filterActive && styles.filterButtonActive]} onPress={() => setFilterOpen(true)}>
+                    <Text style={[styles.filterButtonText, filterActive && styles.filterButtonTextActive]}>
+                        {filterActive ? `Filter (${foodTypes.length})` : 'Filter'}
+                    </Text>
+                </Pressable>
+                {filterActive && (
+                    <Pressable onPress={() => setFoodTypes([])}>
+                        <Text style={styles.clearFilter}>Clear</Text>
+                    </Pressable>
+                )}
+            </View>
+
             {error && <Text style={styles.error}>{error}</Text>}
             <FlatList
                 data={items}
@@ -60,7 +83,19 @@ export default function FoodInventoryView() {
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 contentContainerStyle={items.length === 0 ? styles.emptyContainer : undefined}
-                ListEmptyComponent={error ? undefined : <EmptyInventory />}
+                ListEmptyComponent={
+                    error ? undefined : filterActive ? <NoResults onClear={() => setFoodTypes([])} /> : <EmptyInventory />
+                }
+            />
+
+            <FilterPanel
+                visible={filterOpen}
+                selectedFoodTypes={foodTypes}
+                onApply={(selected) => {
+                    setFoodTypes(selected);
+                    setFilterOpen(false);
+                }}
+                onClose={() => setFilterOpen(false)}
             />
         </View>
     );
@@ -77,7 +112,7 @@ function FoodItemRow({ item }: { item: FoodItemSummary }) {
             <View style={styles.details}>
                 <Text style={styles.name}>{item.name}</Text>
                 <Text style={styles.subtext}>
-                    {item.foodType} · {item.storageLocation}
+                    {labelFor(FOOD_TYPES, item.foodType)} · {item.storageLocation}
                 </Text>
                 <Text style={styles.subtext}>Expires {item.expirationDate}</Text>
             </View>
@@ -102,10 +137,28 @@ function EmptyInventory() {
     );
 }
 
+// Shown when a filter is on but nothing matches it.
+function NoResults({ onClear }: { onClear: () => void }) {
+    return (
+        <View style={styles.center}>
+            <Text style={styles.emptyText}>No items found for this filter.</Text>
+            <Pressable style={styles.addButton} onPress={onClear}>
+                <Text style={styles.addButtonText}>Clear filter</Text>
+            </Pressable>
+        </View>
+    );
+}
+
 const styles = StyleSheet.create({
     screen: { flex: 1, backgroundColor: '#fff', paddingTop: 60, paddingHorizontal: 16 },
     center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
     title: { fontSize: 28, fontWeight: 'bold', marginBottom: 12 },
+    filterBar: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 8 },
+    filterButton: { borderWidth: 1, borderColor: '#ccc', borderRadius: 16, paddingHorizontal: 14, paddingVertical: 6 },
+    filterButtonActive: { backgroundColor: '#2E7D32', borderColor: '#2E7D32' },
+    filterButtonText: { color: '#333', fontWeight: '600' },
+    filterButtonTextActive: { color: '#fff' },
+    clearFilter: { color: '#2E7D32', fontWeight: '600' },
     error: { color: '#C62828', marginBottom: 12 },
     row: {
         flexDirection: 'row',
