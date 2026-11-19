@@ -1,6 +1,6 @@
-package main.java.isopods.data.foodinventorydatabase;
+package isopods.data.foodinventorydatabase;
 
-import main.java.isopods.logic.fooditemadder.FoodItemAdder;
+import isopods.logic.fooditemadder.FoodItemAdder;
 
 public class FoodInventoryDatabase {
     public FoodInventoryDatabase() {

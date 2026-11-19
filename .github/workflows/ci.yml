@@ -1,0 +1,35 @@
+# Backend CI.
+#
+# Features:
+#  - Runs on every pull request into main and every push to main.
+#  - Builds the backend and runs its JUnit tests.
+
+name: Backend CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+        
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - run: ./mvnw -B verify

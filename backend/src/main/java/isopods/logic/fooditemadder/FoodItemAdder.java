@@ -1,9 +1,9 @@
-package main.java.isopods.logic.fooditemadder;
+package isopods.logic.fooditemadder;
 
 import java.io.File;
 import java.time.LocalDate;
 
-import main.java.isopods.data.foodinventorydatabase.FoodInventoryDatabase;
+import isopods.data.foodinventorydatabase.FoodInventoryDatabase;
 
 public class FoodItemAdder {
     private FoodInventoryDatabase database;

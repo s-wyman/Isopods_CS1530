@@ -1,4 +1,4 @@
-package main.java.isopods;
+package isopods;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,12 +7,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import main.java.isopods.data.externalservices.ExternalServices;
-import main.java.isopods.data.foodinventorydatabase.FoodInventoryDatabase;
-import main.java.isopods.logic.foodinventoryviewer.FoodInventoryViewer;
-import main.java.isopods.logic.fooditemadder.FoodItemAdder;
-import main.java.isopods.logic.fooditemadder.FoodItemAdder.FoodItem;
-import main.java.isopods.logic.recipeviewer.RecipeViewer;
+import isopods.data.externalservices.ExternalServices;
+import isopods.data.foodinventorydatabase.FoodInventoryDatabase;
+import isopods.logic.foodinventoryviewer.FoodInventoryViewer;
+import isopods.logic.fooditemadder.FoodItemAdder;
+import isopods.logic.fooditemadder.FoodItemAdder.FoodItem;
+import isopods.logic.recipeviewer.RecipeViewer;
 
 public class App {
     private static final Scanner in = new Scanner(System.in);
