@@ -45,7 +45,7 @@ The purpose of our project is to build a system that lets users keep track of ex
 1. Install Java 25 or newer.
 2. Clone this repository and open a terminal in `Isopods_CS1530/backend`.
 3. Build the backend and run its tests with `.\mvnw.cmd verify` on Windows or `./mvnw verify` on Mac/Linux.
-4. Start the console app with `java -cp target/classes isopods.App`.
+4. Start the server and console with `.\mvnw.cmd compile exec:java` on Windows or `./mvnw compile exec:java` on Mac/Linux. The food inventory list is served at http://localhost:7070/api/items.
 5. Use `add <name> <food type> <storage location> <expiration year> <expiration month> <expiration day> <path to image (this is optional)>` to add FoodItem objects to the database.
 6. Use view to see a list of all FoodItem objects.
 

@@ -14,15 +14,17 @@ public class FoodItemAdder {
 
     public FoodItem addItem(String foodName, String foodType, String storageLocation, LocalDate expirationDate, File image) {
         FoodItem newItem = new FoodItem(foodName, foodType, storageLocation, expirationDate, image);
+        database.addItem(newItem);
         return newItem;
     }
 
     public FoodItem addItem(String foodName, String foodType, String storageLocation, LocalDate expirationDate) {
         FoodItem newItem = new FoodItem(foodName, foodType, storageLocation, expirationDate);
+        database.addItem(newItem);
         return newItem;
     }
 
-    public String removeItem(FoodItem item) {
+    public boolean removeItem(FoodItem item) {
         return database.removeItem(item);
     }
 
