@@ -103,7 +103,7 @@ public class FoodItemAdder {
         
         private void updateExpirationStatus(LocalDate newExpirationDate) {
             LocalDate rightNow = LocalDate.now();
-            if (rightNow.isBefore(newExpirationDate)) {
+            if (rightNow.isAfter(newExpirationDate)) {
                 this.expirationStatus = true;
             } else this.expirationStatus = false;
             return;
