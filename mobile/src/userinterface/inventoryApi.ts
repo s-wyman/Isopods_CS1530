@@ -6,7 +6,7 @@ export type FoodItemSummary = {
     foodType: string;
     storageLocation: string;
     expirationDate: string; // example:"2026-11-20"
-    expirationStatus: ExpirationStatus;
+    status: ExpirationStatus;
 };
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:7070';

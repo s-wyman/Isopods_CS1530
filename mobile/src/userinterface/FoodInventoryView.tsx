@@ -11,9 +11,9 @@ import {
 import { ExpirationStatus, FoodItemSummary, fetchFoodItems } from './inventoryApi';
 
 const STATUS_DISPLAY: Record<ExpirationStatus, { label: string; icon: string; color: string }> = {
-    FRESH: { label: 'Fresh', icon: '✅', color: '2E7D32' },
-    EXPIRING_SOON: { label: 'Expiring Soon', icon: '⚠️', color: 'B26A00' },
-    EXPIRED: { label: 'Expired', icon: '❌', color: 'C62828' },
+  FRESH: { label: 'Fresh', icon: '✓', color: '#2E7D32' },
+  EXPIRING_SOON: { label: 'Expiring Soon', icon: '!', color: '#DD843C' },
+  EXPIRED: { label: 'Expired', icon: '✕', color: '#C62828' },
 };
 
 export default function FoodInventoryView() {
