@@ -1,17 +1,29 @@
-package main.java.isopods.data.foodinventorydatabase;
+package isopods.data.foodinventorydatabase;
 
-import main.java.isopods.logic.fooditemadder.FoodItemAdder;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import isopods.logic.fooditemadder.FoodItemAdder.FoodItem;
+
+/**
+ * Stores food items in memory until the PostgreSQL database is set up.
+ * Safe to use from the console and the web server at the same time.
+ */
 
 public class FoodInventoryDatabase {
-    public FoodInventoryDatabase() {
 
+    private final List<FoodItem> items = new CopyOnWriteArrayList<>();
+
+    public void addItem(FoodItem item) {
+        items.add(item);
     }
 
-    public String addItem(FoodItemAdder.FoodItem item) {
-        return "yup totally did that it all worked for reals yeah all good :)";
+    public boolean removeItem(FoodItem item) {
+        return items.remove(item);
     }
 
-    public String removeItem(FoodItemAdder.FoodItem item) {
-        return "yup totally did that it all worked for reals yeah all good :)";
+    public List<FoodItem> getAllItems() {
+        return List.copyOf(items);
     }
+
 }
