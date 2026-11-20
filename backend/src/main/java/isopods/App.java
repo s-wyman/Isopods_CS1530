@@ -1,10 +1,8 @@
 package isopods;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import io.javalin.Javalin;
