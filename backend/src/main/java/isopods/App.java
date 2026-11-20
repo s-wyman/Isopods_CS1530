@@ -3,10 +3,13 @@ package isopods;
 import java.io.File;
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.Map;
 
 import io.javalin.Javalin;
+import io.javalin.http.BadRequestResponse;
+import io.javalin.http.NotFoundResponse;
 import isopods.api.AddFoodItemRequest;
 import isopods.data.externalservices.ExternalServices;
 import isopods.data.foodinventorydatabase.FoodInventoryDatabase;
@@ -14,6 +17,7 @@ import isopods.logic.foodinventoryviewer.FoodInventoryViewer;
 import isopods.logic.fooditemadder.FoodItemAdder;
 import isopods.model.FoodItem;
 import isopods.logic.recipeviewer.RecipeViewer;
+import isopods.logic.foodinventoryviewer.SortOrder;
 
 public class App {
 
@@ -35,14 +39,17 @@ public class App {
 
         Javalin.create(config -> {
 
-            // Retrieve food items
-            config.routes.get("/api/items", ctx -> ctx.json(
-                viewer.getItems(
-                    FoodInventoryViewer.parseFilter(
-                        ctx.queryParam("foodType")
-                    )
-                )
-            ));
+            config.routes.get("/api/items", ctx -> ctx.json(viewer.getItems(
+                FoodInventoryViewer.parseFilter(ctx.queryParam("foodType")),
+                SortOrder.parse(ctx.queryParam("sort"))))
+            );
+
+            config.routes.patch("/api/items/{id}", ctx -> {
+                LocalDate expirationDate = parseExpirationDate(ctx.bodyAsClass(ExpirationDateUpdate.class).expirationDate());
+                FoodItem item = adder.updateExpirationDate(ctx.pathParam("id"), expirationDate)
+                        .orElseThrow(() -> new NotFoundResponse("No food item has that id"));
+                ctx.json(viewer.summarize(item));
+            });
 
             config.routes.post("/api/items", ctx -> {
 
@@ -133,4 +140,25 @@ public class App {
                 System.out.println("Invalid command");
         }
     }
+
+    /**
+     * The JSON body of a request to change a food item's expiration date, such as
+     * {"expirationDate": "2026-12-01"}.
+     */
+
+    public record ExpirationDateUpdate(String expirationDate) {}
+
+    private static LocalDate parseExpirationDate(String value) {
+        
+        if (value == null)
+            throw new BadRequestResponse("expirationDate is required, such as 2026-12-01");
+        
+        try {
+            return LocalDate.parse(value);
+        } catch (DateTimeParseException e) {
+            throw new BadRequestResponse("expirationDate must be a date such as 2026-12-01");
+        }
+        
+    }
+
 }

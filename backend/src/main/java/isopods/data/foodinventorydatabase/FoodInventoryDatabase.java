@@ -1,6 +1,7 @@
 package isopods.data.foodinventorydatabase;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import isopods.model.FoodItem;
@@ -24,6 +25,10 @@ public class FoodInventoryDatabase {
 
     public List<FoodItem> getAllItems() {
         return List.copyOf(items);
+    }
+
+    public Optional<FoodItem> findItem(String id) {
+        return items.stream().filter(item -> item.getId().equals(id)).findFirst();
     }
 
 }

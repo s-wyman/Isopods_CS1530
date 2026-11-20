@@ -2,8 +2,12 @@ package isopods.model;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class FoodItem {
+
+  private final String id = UUID.randomUUID().toString();
+
   private String foodName;
   private String foodType;
   private String storageLocation;
@@ -26,6 +30,10 @@ public class FoodItem {
       this.storageLocation = storageLocation;
       this.expirationDate = expirationDate;
       updateExpirationStatus(expirationDate);
+  }
+
+  public String getId() {
+      return id;
   }
 
   public String getFoodName() {
