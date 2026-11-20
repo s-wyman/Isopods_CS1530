@@ -51,10 +51,7 @@ The purpose of our project is to build a system that lets users keep track of ex
 
 ### Running the mobile app
 1. Start the backend (steps above) and leave it running.
-2. In `mobile/`, create a file named `.env.local` containing
-   `EXPO_PUBLIC_API_URL=http://<your computer's IP>:7070`.
-   The IP is shown in Expo's `exp://...` line. Your phone must be on the same Wi-Fi.
-3. In `mobile/`, run `npm install`, then `npx expo start`, and scan the QR code with the Expo Go app.
+2. In `mobile/`, run `npm install`, then `npx expo start`, and scan the QR code with the Expo Go app.
 
 ## Current Functionality
 
