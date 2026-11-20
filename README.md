@@ -45,7 +45,8 @@ The purpose of our project is to build a system that lets users keep track of ex
 1. Install Java 25 or newer.
 2. Clone this repository and open a terminal in `Isopods_CS1530/backend`.
 3. Build the backend and run its tests with `.\mvnw.cmd verify` on Windows or `./mvnw verify` on Mac/Linux.
-4. Start the server and console with `.\mvnw.cmd compile exec:java` on Windows or `./mvnw compile exec:java` on Mac/Linux. The food inventory list is served at http://localhost:7070/api/items.
+4. Start the server and console with `.\mvnw.cmd compile exec:java` on Windows or `./mvnw compile exec:java` on Mac/Linux. The food inventory list is served at http://localhost:7070/api/items. Add `?sort=asc` or `?sort=desc` to sort it by expiration date. Send `PATCH /api/items/{id}` with `{"expirationDate": "2026-12-01"}` to change an item's expiration date.
+
 5. Use `add <name> <food type> <storage location> <expiration year> <expiration month> <expiration day> <path to image (this is optional)>` to add FoodItem objects to the database.
 6. Use view to see a list of all FoodItem objects.
 
@@ -69,6 +70,11 @@ Tap **Clear** to show all items again.
 
 **Enter Expiration Date Manually (US6):** The "Add Food" form allows the user to keep track of food item expiration dates by entering it using an intuitive calendar UI to select a valid and exact day, month, and year.
 
+**Edit Expiration Date (US8):** Tapping a food item opens a date picker to choose a new expiration date. On iPhone, a calendar appears with "Save" and "Cancel" buttons; on Android, the system date dialog opens. After saving, the item's date and its Fresh / Expiring Soon / Expired badge update. Canceling leaves the date unchanged.
+
+**Sort by Expiration Date (US9):** Tap **Sort by date** on the right of the filter bar to show the soonest-expiring items first. Tap again for latest first, and once more to return to the original order. Sorting only changes the order shown, not the saved items.
+
+
 ## Generative AI Usage Disclaimers
 
 ### We used Generative AI to:
@@ -77,3 +83,4 @@ Tap **Clear** to show all items again.
 - help write the code for the food filters
 - create the Add Food form UI
 - help write the code for the add food functionality
+- help write the code for sorting and editing expiration dates
