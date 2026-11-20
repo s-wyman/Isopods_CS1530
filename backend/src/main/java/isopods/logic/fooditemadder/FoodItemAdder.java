@@ -2,10 +2,13 @@ package isopods.logic.fooditemadder;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.Optional;
+import java.util.UUID;
 
 import isopods.data.foodinventorydatabase.FoodInventoryDatabase;
 
 public class FoodItemAdder {
+
     private FoodInventoryDatabase database;
     
     public FoodItemAdder(FoodInventoryDatabase database) {
@@ -28,7 +31,21 @@ public class FoodItemAdder {
         return database.removeItem(item);
     }
 
+    /**
+     * Replaces the expiration date of the item with the given id.
+     *
+     * @return the updated item, or empty if no item has that id
+     */
+    public Optional<FoodItem> updateExpirationDate(String id, LocalDate expirationDate) {
+        Optional<FoodItem> item = database.findItem(id);
+        item.ifPresent(found -> found.setExpirationDate(expirationDate));
+        return item;
+    }
+
     public class FoodItem {
+
+        private final String id = UUID.randomUUID().toString();
+
         private String foodName;
         private String foodType;
         private String storageLocation;
@@ -51,6 +68,10 @@ public class FoodItemAdder {
             this.storageLocation = storageLocation;
             this.expirationDate = expirationDate;
             updateExpirationStatus(expirationDate);
+        }
+
+        public String getId() {
+            return id;
         }
 
         public String getFoodName() {
