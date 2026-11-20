@@ -1,15 +1,31 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchInventory, type FoodItemSummary } from "../api";
+import { ActivityIndicator, Alert, Button, FlatList, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
+import { fetchInventory, updateExpirationDate, type FoodItemSummary, type SortOrder } from "../api";
+import { parseIsoDate, toIsoDate } from "../utils/dates";
+
+import ExpirationDatePicker from "../components/ExpirationDatePicker";
 import FilterPanel from "../components/FilterPanel";
 import FoodItemRow from "../components/FoodItemRow";
 
-import { ActivityIndicator, Button, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+const NEXT_SORT: Record<SortOrder, SortOrder> = { 
+  none: "asc", 
+  asc: "desc", 
+  desc: "none" 
+};
+
+const SORT_LABELS: Record<SortOrder, string> = {
+  none: "Sort by date",
+  asc: "Soonest first",
+  desc: "Latest first" 
+};
 
 /**
- * Shows the user's food inventory. Pull down to reload the list after items change, or open
- * the filter panel to show only certain food types.
+ * Shows the user's food inventory. Pull down to reload the list after items change, open the
+ * filter panel to show only certain food types, sort by expiration date, or tap an item to
+ * change its expiration date.
  *
  * @param onAddItem shows an 'Add Food Item' button on the empty list when provided
  */
@@ -21,17 +37,20 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
   const [refreshing, setRefreshing] = useState(false);
   const [foodTypes, setFoodTypes] = useState<string[]>([]);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [sort, setSort] = useState<SortOrder>("none");
+  const [editingItem, setEditingItem] = useState<FoodItemSummary | null>(null);
 
   const filterActive = foodTypes.length > 0;
+  const sortActive = sort !== "none";
 
   const loadItems = useCallback(() => {
-    return fetchInventory(foodTypes)
+    return fetchInventory(foodTypes, sort)
       .then((loadedItems) => {
         setItems(loadedItems);
         setErrorMessage(null);
       })
       .catch(() => setErrorMessage("Couldn't reach server"));
-  }, [foodTypes]);
+  }, [foodTypes, sort]);
 
   useEffect(() => {
     loadItems();
@@ -52,6 +71,29 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
   const applyFilter = (selected: string[]) => {
     setFoodTypes(selected);
     setFilterOpen(false);
+  };
+
+  const saveExpirationDate = async (item: FoodItemSummary, expirationDate: Date) => {
+    setEditingItem(null);
+    try {
+      await updateExpirationDate(item.id, toIsoDate(expirationDate));
+    } catch {
+      Alert.alert("Couldn't save", `The expiration date for ${item.name} was not changed.`);
+      return;
+    }
+    await loadItems();
+  };
+
+  const editExpirationDate = (item: FoodItemSummary) => {
+    if (Platform.OS === "android")
+      DateTimePickerAndroid.open({
+        value: parseIsoDate(item.expirationDate),
+        mode: "date",
+        onValueChange: (_event, selectedDate) => {
+          if (selectedDate) saveExpirationDate(item, selectedDate);
+        },
+      });
+    else setEditingItem(item);
   };
 
   if (errorMessage)
@@ -76,6 +118,7 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
       <Text style={styles.title}>My Food</Text>
 
       <View style={styles.filterBar}>
+
         <Pressable
           style={[styles.filterButton, filterActive && styles.filterButtonActive]}
           onPress={() => setFilterOpen(true)}
@@ -84,17 +127,28 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
             {filterActive ? `Filter (${foodTypes.length})` : "Filter"}
           </Text>
         </Pressable>
+
         {filterActive && (
           <Pressable onPress={() => setFoodTypes([])}>
             <Text style={styles.clearFilter}>Clear</Text>
           </Pressable>
         )}
+
+        <Pressable
+          style={[styles.filterButton, styles.sortButton, sortActive && styles.filterButtonActive]}
+          onPress={() => setSort(NEXT_SORT[sort])}
+        >
+          <Text style={[styles.filterButtonText, sortActive && styles.filterButtonTextActive]}>
+            {SORT_LABELS[sort]}
+          </Text>
+        </Pressable>
+
       </View>
 
       <FlatList
         data={items}
-        keyExtractor={(item, index) => `${index}-${item.name}`}
-        renderItem={({ item }) => <FoodItemRow item={item} />}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <FoodItemRow item={item} onPress={() => editExpirationDate(item)} />}
         refreshing={refreshing}
         onRefresh={refresh}
         contentContainerStyle={items.length === 0 && styles.centered}
@@ -119,6 +173,14 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
         onApply={applyFilter}
         onClose={() => setFilterOpen(false)}
       />
+
+      {editingItem && (
+        <ExpirationDatePicker 
+          item={editingItem}
+          onSave={(date) => saveExpirationDate(editingItem, date)}
+          onCancel={() => setEditingItem(null)}
+        />
+      )}
 
     </SafeAreaView>
 
@@ -193,6 +255,10 @@ const styles = StyleSheet.create({
     textAlign: "center", 
     color: "#4B5563", 
     marginBottom: 12 
+  }, 
+  
+  sortButton: {
+    marginLeft: "auto" 
   } 
   
 });
