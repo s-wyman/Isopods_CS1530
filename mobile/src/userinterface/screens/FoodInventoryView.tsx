@@ -1,30 +1,37 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchInventory, type FoodItemSummary } from "../api";
 
+import FilterPanel from "../components/FilterPanel";
 import FoodItemRow from "../components/FoodItemRow";
 
-import { ActivityIndicator, Button, FlatList, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Button, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 /**
- * Shows the user's food inventory. Pull down to reload the list after items change.
+ * Shows the user's food inventory. Pull down to reload the list after items change, or open
+ * the filter panel to show only certain food types.
  *
  * @param onAddItem shows an 'Add Food Item' button on the empty list when provided
  */
 
 export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => void }) {
+  
   const [items, setItems] = useState<FoodItemSummary[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [foodTypes, setFoodTypes] = useState<string[]>([]);
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  const filterActive = foodTypes.length > 0;
 
   const loadItems = useCallback(() => {
-    return fetchInventory()
+    return fetchInventory(foodTypes)
       .then((loadedItems) => {
         setItems(loadedItems);
         setErrorMessage(null);
       })
       .catch(() => setErrorMessage("Couldn't reach server"));
-  }, []);
+  }, [foodTypes]);
 
   useEffect(() => {
     loadItems();
@@ -40,6 +47,11 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
     setErrorMessage(null);
     setItems(null);
     loadItems();
+  };
+
+  const applyFilter = (selected: string[]) => {
+    setFoodTypes(selected);
+    setFilterOpen(false);
   };
 
   if (errorMessage)
@@ -58,8 +70,27 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
     );
 
   return (
+
     <SafeAreaView style={styles.screen}>
+
       <Text style={styles.title}>My Food</Text>
+
+      <View style={styles.filterBar}>
+        <Pressable
+          style={[styles.filterButton, filterActive && styles.filterButtonActive]}
+          onPress={() => setFilterOpen(true)}
+        >
+          <Text style={[styles.filterButtonText, filterActive && styles.filterButtonTextActive]}>
+            {filterActive ? `Filter (${foodTypes.length})` : "Filter"}
+          </Text>
+        </Pressable>
+        {filterActive && (
+          <Pressable onPress={() => setFoodTypes([])}>
+            <Text style={styles.clearFilter}>Clear</Text>
+          </Pressable>
+        )}
+      </View>
+
       <FlatList
         data={items}
         keyExtractor={(item, index) => `${index}-${item.name}`}
@@ -68,13 +99,29 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
         onRefresh={refresh}
         contentContainerStyle={items.length === 0 && styles.centered}
         ListEmptyComponent={
-          <View style={styles.empty}>
-            <Text style={styles.message}>Your inventory is empty.</Text>
-            {onAddItem && <Button title="Add Food Item" onPress={onAddItem} />}
-          </View>
+          filterActive ? (
+            <View style={styles.empty}>
+              <Text style={styles.message}>No items found for this filter.</Text>
+              <Button title="Clear Filter" onPress={() => setFoodTypes([])} />
+            </View>
+          ) : (
+            <View style={styles.empty}>
+              <Text style={styles.message}>Your inventory is empty.</Text>
+              {onAddItem && <Button title="Add Food Item" onPress={onAddItem} />}
+            </View>
+          )
         }
       />
+
+      <FilterPanel
+        visible={filterOpen}
+        selectedFoodTypes={foodTypes}
+        onApply={applyFilter}
+        onClose={() => setFilterOpen(false)}
+      />
+
     </SafeAreaView>
+
   );
 
 }
@@ -99,6 +146,41 @@ const styles = StyleSheet.create({
     fontWeight: "700", 
     paddingHorizontal: 16, 
     paddingVertical: 12 
+  }, 
+
+  filterBar: {
+    flexDirection: "row", 
+    alignItems: "center", 
+    gap: 12, 
+    paddingHorizontal: 16, 
+    marginBottom: 8 
+  }, 
+
+  filterButton: {
+    borderWidth: 1, 
+    borderColor: "#D1D5DB", 
+    borderRadius: 16, 
+    paddingHorizontal: 14, 
+    paddingVertical: 6 
+  }, 
+
+  filterButtonActive: {
+    backgroundColor: "#1B7F3B", 
+    borderColor: "#1B7F3B" 
+  }, 
+
+  filterButtonText: {
+    color: "#374151", 
+    fontWeight: "600" 
+  }, 
+
+  filterButtonTextActive: {
+    color: "#FFFFFF" 
+  }, 
+
+  clearFilter: {
+    color: "#1B7F3B", 
+    fontWeight: "600" 
   }, 
 
   empty: {

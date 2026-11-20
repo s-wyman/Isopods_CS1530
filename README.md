@@ -51,10 +51,7 @@ The purpose of our project is to build a system that lets users keep track of ex
 
 ### Running the mobile app
 1. Start the backend (steps above) and leave it running.
-2. In `mobile/`, create a file named `.env.local` containing
-   `EXPO_PUBLIC_API_URL=http://<your computer's IP>:7070`.
-   The IP is shown in Expo's `exp://...` line. Your phone must be on the same Wi-Fi.
-3. In `mobile/`, run `npm install`, then `npx expo start`, and scan the QR code with the Expo Go app.
+2. In `mobile/`, run `npm install`, then `npx expo start`, and scan the QR code with the Expo Go app.
 
 ## Current Functionality
 
@@ -67,7 +64,15 @@ Pull down to refresh the list. If the inventory is empty, the screen shows an "A
 **Adding food (temporary):** Until US1 is built, food items are added in the backend terminal
 with the `add` command. Item names can't contain spaces (use `greek-yogurt`), and items are
 stored in memory, so they're cleared when the backend stops.
+Use one of these food type keys: `produce`, `meat`, `seafood`, `dairy-eggs`, `bread-bakery`,
+`grains-pasta`, `canned-jarred`, `condiments-sauces`, `snacks`, `sweets`, `beverages`, `other`.
+Example: `add milk dairy-eggs fridge 2026 11 25`
+
+**Filter by Food Type (US4):** Tap **Filter** above the list to choose one or more food types
+(e.g., Dairy & Eggs and Meat). The list then shows only items of those types, and the button shows
+how many filters are active. If nothing matches, the screen says so and offers to clear the filter.
+Tap **Clear** to show all items again.
 
 ## Generative AI Usage Disclaimer
 
-We used Generative AI to check our Deployment Diagram.
+We used Generative AI to check our Deployment Diagram, create the Food Inventory Screen, and to help write the code for the food filters.

@@ -19,7 +19,7 @@ public class App {
     private static final Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) {
-        
+
         FoodInventoryDatabase database = new FoodInventoryDatabase();
         FoodInventoryViewer viewer = new FoodInventoryViewer(database);
         RecipeViewer recipes = new RecipeViewer();
@@ -31,16 +31,19 @@ public class App {
         int port = Integer.parseInt(System.getenv().getOrDefault("PORT", "7070"));
 
         Javalin.create(config -> {
-            config.routes.get("/api/items", ctx -> ctx.json(viewer.getAllItems()));
+            config.routes.get("/api/items", ctx -> ctx.json(viewer.getItems(
+                    FoodInventoryViewer.parseFilter(ctx.queryParam("foodType")))));
         }).start(port);
 
-        System.out.println("Commands: add <name> <food type> <storage location> <expiration year> <expiration month> <expiration day> <path to image (this is optional)>, view");
+        System.out.println(
+                "Commands: add <name> <food type> <storage location> <expiration year> <expiration month> <expiration day> <path to image (this is optional)>, view");
 
         while (in.hasNextLine()) {
             String[] words = in.nextLine().trim().toLowerCase().split("\\s+");
             if (words[0].equals("add") && (words.length == 7 || words.length == 8)) {
                 try {
-                    date = LocalDate.of(Integer.parseInt(words[4]), Integer.parseInt(words[5]), Integer.parseInt(words[6]));
+                    date = LocalDate.of(Integer.parseInt(words[4]), Integer.parseInt(words[5]),
+                            Integer.parseInt(words[6]));
                 } catch (DateTimeException e) {
                     System.out.println(e);
                     continue;
@@ -60,18 +63,19 @@ public class App {
                     continue;
                 }
                 adder.addItem(words[1], words[2], words[3], date);
-            }
-            else if (words[0].equals("view")) {
+            } else if (words[0].equals("view")) {
                 for (FoodItem item : database.getAllItems()) {
                     System.out.println("Name: " + item.getFoodName());
                     System.out.println("Food Type: " + item.getFoodType());
                     System.out.println("Storage Location: " + item.getStorageLocation());
                     System.out.println("Expiration Date: " + item.getExpirationDate());
                     System.out.println("Expiration Status: " + item.getExpirationStatus());
-                    if (item.getImage() != null) System.out.println("Image Path: " + item.getImage().getAbsolutePath());
+                    if (item.getImage() != null)
+                        System.out.println("Image Path: " + item.getImage().getAbsolutePath());
                     System.out.println("");
                 }
-            } else System.out.println("Invalid command");
+            } else
+                System.out.println("Invalid command");
         }
     }
 }

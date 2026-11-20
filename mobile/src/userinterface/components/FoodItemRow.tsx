@@ -4,6 +4,8 @@ import { Ionicons } from "@react-native-vector-icons/ionicons";
 import type { ComponentProps } from "react";
 import type { FoodItemSummary, ExpirationStatus } from "../api";
 
+import { FOOD_TYPES, labelFor } from "./FilterPanel";
+
 type StatusDisplay = {
   label: string;
   icon: ComponentProps<typeof Ionicons>["name"];
@@ -40,7 +42,7 @@ export default function FoodItemRow({ item }: { item: FoodItemSummary }) {
       <View style={styles.details}>
 
         <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.meta}>{item.foodType} - {item.storageLocation}</Text>
+        <Text style={styles.meta}>{labelFor(FOOD_TYPES, item.foodType)} - {item.storageLocation}</Text>
         <Text style={styles.meta}>Expires {formatDate(item.expirationDate)}</Text>
         
         <View style={styles.badge}>
