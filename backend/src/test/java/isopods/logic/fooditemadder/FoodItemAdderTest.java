@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import isopods.data.foodinventorydatabase.FoodInventoryDatabase;
-import isopods.logic.fooditemadder.FoodItemAdder.FoodItem;
+import isopods.model.FoodItem;
 
 /**
  * Food Item Adder Tests.
