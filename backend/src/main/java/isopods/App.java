@@ -5,15 +5,17 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+import java.util.Map;
 
 import io.javalin.Javalin;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.NotFoundResponse;
+import isopods.api.AddFoodItemRequest;
 import isopods.data.externalservices.ExternalServices;
 import isopods.data.foodinventorydatabase.FoodInventoryDatabase;
 import isopods.logic.foodinventoryviewer.FoodInventoryViewer;
 import isopods.logic.fooditemadder.FoodItemAdder;
-import isopods.logic.fooditemadder.FoodItemAdder.FoodItem;
+import isopods.model.FoodItem;
 import isopods.logic.recipeviewer.RecipeViewer;
 import isopods.logic.foodinventoryviewer.SortOrder;
 
@@ -31,7 +33,9 @@ public class App {
         LocalDate date;
         File image;
 
-        int port = Integer.parseInt(System.getenv().getOrDefault("PORT", "7070"));
+        int port = Integer.parseInt(
+            System.getenv().getOrDefault("PORT", "7070")
+        );
 
         Javalin.create(config -> {
 
@@ -47,6 +51,50 @@ public class App {
                 ctx.json(viewer.summarize(item));
             });
 
+            config.routes.post("/api/items", ctx -> {
+
+                AddFoodItemRequest request =
+                        ctx.bodyAsClass(AddFoodItemRequest.class);
+
+                if (request.name() == null || request.name().isBlank()
+                        || request.foodType() == null || request.foodType().isBlank()
+                        || request.storageLocation() == null
+                        || request.storageLocation().isBlank()
+                        || request.expirationDate() == null
+                        || request.expirationDate().isBlank()) {
+
+                    ctx.status(400).json(
+                        Map.of("error", "All fields are required.")
+                    );
+
+                    return;
+                }
+
+                try {
+
+                    LocalDate expirationDate =
+                            LocalDate.parse(request.expirationDate());
+
+                    adder.addItem(
+                            request.name().trim(),
+                            request.foodType().trim(),
+                            request.storageLocation().trim(),
+                            expirationDate
+                    );
+
+                    ctx.status(201).json(
+                        Map.of("message", "Food item created.")
+                    );
+
+                } catch (DateTimeException e) {
+
+                    ctx.status(400).json(
+                        Map.of("error", "Invalid expiration date.")
+                    );
+
+                }
+
+            });
         }).start(port);
 
         System.out.println(

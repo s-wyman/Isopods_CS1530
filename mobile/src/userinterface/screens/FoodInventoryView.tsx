@@ -6,9 +6,11 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { fetchInventory, updateExpirationDate, type FoodItemSummary, type SortOrder } from "../api";
 import { parseIsoDate, toIsoDate } from "../utils/dates";
 
+import Ionicons from "@react-native-vector-icons/ionicons";
 import ExpirationDatePicker from "../components/ExpirationDatePicker";
 import FilterPanel from "../components/FilterPanel";
 import FoodItemRow from "../components/FoodItemRow";
+import AddFoodForm from "../components/AddFoodForm";
 
 const NEXT_SORT: Record<SortOrder, SortOrder> = { 
   none: "asc", 
@@ -26,12 +28,9 @@ const SORT_LABELS: Record<SortOrder, string> = {
  * Shows the user's food inventory. Pull down to reload the list after items change, open the
  * filter panel to show only certain food types, sort by expiration date, or tap an item to
  * change its expiration date.
- *
- * @param onAddItem shows an 'Add Food Item' button on the empty list when provided
  */
+export default function FoodInventoryView() {
 
-export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => void }) {
-  
   const [items, setItems] = useState<FoodItemSummary[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -39,6 +38,8 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
   const [filterOpen, setFilterOpen] = useState(false);
   const [sort, setSort] = useState<SortOrder>("none");
   const [editingItem, setEditingItem] = useState<FoodItemSummary | null>(null);
+
+  const [addFoodOpen, setAddFoodOpen] = useState(false);
 
   const filterActive = foodTypes.length > 0;
   const sortActive = sort !== "none";
@@ -161,10 +162,23 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
           ) : (
             <View style={styles.empty}>
               <Text style={styles.message}>Your inventory is empty.</Text>
-              {onAddItem && <Button title="Add Food Item" onPress={onAddItem} />}
             </View>
           )
         }
+      />
+
+      <Pressable
+        style={[styles.addFoodButton]}
+        onPress={() => setAddFoodOpen(true)}
+      >
+        <Ionicons name="add" size={20} color="#FFFFFF"/>
+        <Text style={styles.addFoodButtonText}>Add Food</Text>
+      </Pressable>
+
+      <AddFoodForm
+        visible={addFoodOpen}
+        onClose={() => setAddFoodOpen(false)}
+        onSaved={refresh}
       />
 
       <FilterPanel
@@ -188,77 +202,99 @@ export default function FoodInventoryView({ onAddItem }: { onAddItem?: () => voi
 
 }
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
 
   screen: {
-    flex: 1, 
-    backgroundColor: "#FFFFFF" 
-  }, 
+    flex: 1,
+    backgroundColor: "#FFFFFF"
+  },
 
   centered: {
-    flexGrow: 1, 
-    alignItems: "center", 
-    justifyContent: "center", 
-    padding: 24, 
-    backgroundColor: "#FFFFFF" 
-  }, 
+    flexGrow: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 24,
+    backgroundColor: "#FFFFFF"
+  },
 
   title: {
-    fontSize: 28, 
-    fontWeight: "700", 
-    paddingHorizontal: 16, 
-    paddingVertical: 12 
-  }, 
+    fontSize: 28,
+    fontWeight: "700",
+    paddingHorizontal: 16,
+    paddingVertical: 12
+  },
+
+  addFoodButton: {
+    marginBottom: 32,
+    marginRight: 16,
+    alignSelf: "flex-end",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: "#1B7F3B",
+    borderRadius: 32,
+    paddingHorizontal: 18,
+    paddingVertical: 18,
+  },
+
+  addFoodButtonDisabled: {
+    backgroundColor: "#9CA3AF"
+  },
+
+  addFoodButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+  },
 
   filterBar: {
-    flexDirection: "row", 
-    alignItems: "center", 
-    gap: 12, 
-    paddingHorizontal: 16, 
-    marginBottom: 8 
-  }, 
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingHorizontal: 16,
+    marginBottom: 8,
+  },
 
   filterButton: {
-    borderWidth: 1, 
-    borderColor: "#D1D5DB", 
-    borderRadius: 16, 
-    paddingHorizontal: 14, 
-    paddingVertical: 6 
-  }, 
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 6
+  },
 
   filterButtonActive: {
-    backgroundColor: "#1B7F3B", 
-    borderColor: "#1B7F3B" 
-  }, 
+    backgroundColor: "#1B7F3B",
+    borderColor: "#1B7F3B"
+  },
 
   filterButtonText: {
-    color: "#374151", 
-    fontWeight: "600" 
-  }, 
+    color: "#374151",
+    fontWeight: "600"
+  },
 
   filterButtonTextActive: {
-    color: "#FFFFFF" 
-  }, 
+    color: "#FFFFFF"
+  },
 
   clearFilter: {
-    color: "#1B7F3B", 
-    fontWeight: "600" 
-  }, 
+    color: "#1B7F3B",
+    fontWeight: "600"
+  },
 
   empty: {
-    alignItems: "center", 
-    gap: 12 
+    alignItems: "center",
+    gap: 12
+  },
+
+  message: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#4B5563",
+    marginBottom: 12
   }, 
 
-  message: { 
-    fontSize: 16, 
-    textAlign: "center", 
-    color: "#4B5563", 
-    marginBottom: 12 
-  }, 
-  
   sortButton: {
-    marginLeft: "auto" 
+    marginLeft: "auto"
   } 
-  
+
 });

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import isopods.logic.fooditemadder.FoodItemAdder.FoodItem;
+import isopods.model.FoodItem;
 
 /**
  * Stores food items in memory until the PostgreSQL database is set up.

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import isopods.data.foodinventorydatabase.FoodInventoryDatabase;
-import isopods.logic.fooditemadder.FoodItemAdder.FoodItem;
+import isopods.model.FoodItem;
 
 /**
  * Food Item Adder Tests.

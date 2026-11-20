@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import isopods.data.foodinventorydatabase.FoodInventoryDatabase;
 import isopods.logic.fooditemadder.FoodItemAdder;
+import isopods.model.FoodItem;
 
 class FoodInventoryViewerTest {
 
@@ -27,7 +28,7 @@ class FoodInventoryViewerTest {
     void addedItemAppearsWithItsDetailsAndStatus() {
 
         LocalDate expirationDate = LocalDate.now().plusDays(10);
-        FoodItemAdder.FoodItem milk = adder.addItem("Milk", "Dairy", "Fridge", expirationDate);
+        FoodItem milk = adder.addItem("Milk", "Dairy", "Fridge", expirationDate);
 
         FoodItemSummary expected = new FoodItemSummary(milk.getId(), "Milk", "Dairy", "Fridge", expirationDate.toString(), ExpirationStatus.FRESH);
         assertEquals(List.of(expected), viewer.getAllItems());

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import isopods.data.foodinventorydatabase.FoodInventoryDatabase;
-import isopods.logic.fooditemadder.FoodItemAdder.FoodItem;
+import isopods.model.FoodItem;
 
 /**
  * Builds the food inventory list that the mobile app displays.

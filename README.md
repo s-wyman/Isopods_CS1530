@@ -55,24 +55,25 @@ The purpose of our project is to build a system that lets users keep track of ex
 
 ## Current Functionality
 
+**Add Food (US1):** The app's home screen has a floating action button in the bottom right-hand corner labeled "+ Add Food" that when pressed, displays the "Add Food" form. This form has input fields for the new food item's name, options for food type, options for storage location, and a calendar input for the expiration date. Once all fields are filled, the user can confirm by pressing the "Confirm" button or press the "Cancel" button to go back. If the user doesn't fill out all the fields, or filled a field incorrectly, the form highlights those fields with a red outline and displays a message underneath the field.
+
 **View Food Inventory (US2):** The app's home screen lists every saved food item with its
 name, food type, storage location, expiration date, and a placeholder image. Each item shows
 a colored badge: Fresh (green), Expiring Soon (orange, within 3 days), or Expired (red).
-Pull down to refresh the list. If the inventory is empty, the screen shows an "Add food" button
-(adding from the app is coming with US1).
-
-**Adding food (temporary):** Until US1 is built, food items are added in the backend terminal
-with the `add` command. Item names can't contain spaces (use `greek-yogurt`), and items are
-stored in memory, so they're cleared when the backend stops.
-Use one of these food type keys: `produce`, `meat`, `seafood`, `dairy-eggs`, `bread-bakery`,
-`grains-pasta`, `canned-jarred`, `condiments-sauces`, `snacks`, `sweets`, `beverages`, `other`.
-Example: `add milk dairy-eggs fridge 2026 11 25`
+Pull down to refresh the list.
 
 **Filter by Food Type (US4):** Tap **Filter** above the list to choose one or more food types
 (e.g., Dairy & Eggs and Meat). The list then shows only items of those types, and the button shows
 how many filters are active. If nothing matches, the screen says so and offers to clear the filter.
 Tap **Clear** to show all items again.
 
-## Generative AI Usage Disclaimer
+**Enter Expiration Date Manually (US6):** The "Add Food" form allows the user to keep track of food item expiration dates by entering it using an intuitive calendar UI to select a valid and exact day, month, and year.
 
-We used Generative AI to check our Deployment Diagram, create the Food Inventory Screen, and to help write the code for the food filters.
+## Generative AI Usage Disclaimers
+
+### We used Generative AI to:
+- check our Deployment Diagram
+- create the Food Inventory Screen
+- help write the code for the food filters
+- create the Add Food form UI
+- help write the code for the add food functionality
