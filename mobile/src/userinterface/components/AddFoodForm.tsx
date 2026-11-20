@@ -29,6 +29,15 @@ const EMPTY_FORM: NewFoodItem = {
   expirationDate: "",
 };
 
+const STORAGE_LOCATIONS = [
+  "Refrigerator",
+  "Freezer",
+  "Pantry",
+  "Countertop",
+  "Cabinet",
+  "Other",
+] as const;
+
 function isValidDate(value: string): boolean {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
 
@@ -237,17 +246,40 @@ export default function AddFoodForm({
             )}
 
             <Text style={styles.label}>Storage location *</Text>
-            <TextInput
+
+            <View
               style={[
-                styles.input,
-                errors.storageLocation && styles.inputInvalid,
+                styles.chips,
+                errors.storageLocation && styles.groupInvalid,
               ]}
-              value={form.storageLocation}
-              onChangeText={(value) =>
-                updateField("storageLocation", value)
-              }
-              placeholder="e.g. Refrigerator"
-            />
+            >
+              {STORAGE_LOCATIONS.map((location) => {
+                const selected = form.storageLocation === location;
+
+                return (
+                  <Pressable
+                    key={location}
+                    onPress={() => updateField("storageLocation", location)}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected }}
+                    style={[
+                      styles.chip,
+                      selected && styles.chipSelected,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.chipText,
+                        selected && styles.chipTextSelected,
+                      ]}
+                    >
+                      {location}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+
             {errors.storageLocation && (
               <Text style={styles.fieldError}>
                 {errors.storageLocation}
@@ -282,8 +314,8 @@ export default function AddFoodForm({
 
             <Pressable
               style={[
-                styles.saveButton,
-                saving && styles.saveButtonDisabled,
+                styles.confirmButton,
+                saving && styles.confirmButtonDisabled,
               ]}
               onPress={handleSave}
               disabled={saving}
@@ -291,7 +323,7 @@ export default function AddFoodForm({
               {saving ? (
                 <ActivityIndicator color="#FFFFFF" />
               ) : (
-                <Text style={styles.saveText}>Add Food</Text>
+                <Text style={styles.confirmText}>Confirm</Text>
               )}
             </Pressable>
           </View>
@@ -306,14 +338,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.4)",
     justifyContent: "center",
-    padding: 20,
+    padding: 4,
   },
 
   sheet: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 16,
+    borderRadius: 24,
     padding: 20,
-    maxHeight: "90%",
+    maxHeight: "95%",
   },
 
   title: {
@@ -399,20 +431,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
-  saveButton: {
+  confirmButton: {
     backgroundColor: "#1B7F3B",
-    borderRadius: 8,
+    borderRadius: 24,
     paddingHorizontal: 18,
     paddingVertical: 12,
     minWidth: 110,
     alignItems: "center",
   },
 
-  saveButtonDisabled: {
+  confirmButtonDisabled: {
     opacity: 0.6,
   },
 
-  saveText: {
+  confirmText: {
     color: "#FFFFFF",
     fontWeight: "600",
   },
