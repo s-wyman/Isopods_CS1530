@@ -1,14 +1,29 @@
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { FOOD_TYPES, FilterOption } from './filterOptions';
-
 type FilterPanelProps = {
     visible: boolean;
     selectedFoodTypes: string[];
     onApply: (foodTypes: string[]) => void;
     onClose: () => void;
 };
+
+export type FilterOption = { key: string; label: string };
+
+export const FOOD_TYPES: FilterOption[] = [
+    { key: 'produce', label: 'Produce' },
+    { key: 'meat', label: 'Meat' },
+    { key: 'seafood', label: 'Seafood' },
+    { key: 'dairy-eggs', label: 'Dairy & Eggs' },
+    { key: 'bread-bakery', label: 'Bread & Bakery' },
+    { key: 'grains-pasta', label: 'Grains & Pasta' },
+    { key: 'canned-jarred', label: 'Canned & Jarred' },
+    { key: 'condiments-sauces', label: 'Condiments & Sauces' },
+    { key: 'snacks', label: 'Snacks' },
+    { key: 'sweets', label: 'Sweets' },
+    { key: 'beverages', label: 'Beverages' },
+    { key: 'other', label: 'Other' },
+];
 
 export default function FilterPanel({ visible, selectedFoodTypes, onApply, onClose }: FilterPanelProps) {
     const [draftFoodTypes, setDraftFoodTypes] = useState<string[]>(selectedFoodTypes);
@@ -101,3 +116,7 @@ const styles = StyleSheet.create({
     applyButton: { backgroundColor: '#2E7D32', borderRadius: 8, paddingVertical: 12, alignItems: 'center', marginTop: 16 },
     applyButtonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
 });
+
+export function labelFor(options: FilterOption[], key: string): string {
+    return options.find((option) => option.key === key.toLowerCase())?.label ?? key;
+}
