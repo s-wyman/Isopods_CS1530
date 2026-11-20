@@ -55,13 +55,6 @@ The purpose of our project is to build a system that lets users keep track of ex
 
 ## Current Functionality
 
-**Add Food (command line interface):** Food items can be added in the backend terminal
-with the `add` command. Item names can't contain spaces (use `greek-yogurt`), and items are
-stored in memory, so they're cleared when the backend stops.
-Use one of these food type keys: `produce`, `meat`, `seafood`, `dairy-eggs`, `bread-bakery`,
-`grains-pasta`, `canned-jarred`, `condiments-sauces`, `snacks`, `sweets`, `beverages`, `other`.
-Example: `add milk dairy-eggs fridge 2026 11 25`
-
 **Add Food (US1):** The app's home screen has a floating action button in the bottom right-hand corner labeled "+ Add Food" that when pressed, displays the "Add Food" form. This form has input fields for the new food item's name, options for food type, options for storage location, and a calendar input for the expiration date. Once all fields are filled, the user can confirm by pressing the "Confirm" button or press the "Cancel" button to go back. If the user doesn't fill out all the fields, or filled a field incorrectly, the form highlights those fields with a red outline and displays a message underneath the field.
 
 **View Food Inventory (US2):** The app's home screen lists every saved food item with its
