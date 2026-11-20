@@ -55,7 +55,7 @@ The purpose of our project is to build a system that lets users keep track of ex
 
 ## Current Functionality
 
-**Add Food (command line interface):** Until US1 is built, food items are added in the backend terminal
+**Add Food (command line interface):** Food items can be added in the backend terminal
 with the `add` command. Item names can't contain spaces (use `greek-yogurt`), and items are
 stored in memory, so they're cleared when the backend stops.
 Use one of these food type keys: `produce`, `meat`, `seafood`, `dairy-eggs`, `bread-bakery`,
@@ -73,6 +73,8 @@ Pull down to refresh the list.
 (e.g., Dairy & Eggs and Meat). The list then shows only items of those types, and the button shows
 how many filters are active. If nothing matches, the screen says so and offers to clear the filter.
 Tap **Clear** to show all items again.
+
+**Enter Expiration Date Manually (US6):** The "Add Food" form allows the user to keep track of food item expiration dates by entering it using an intuitive calendar UI to select a valid and exact day, month, and year.
 
 ## Generative AI Usage Disclaimers
 
