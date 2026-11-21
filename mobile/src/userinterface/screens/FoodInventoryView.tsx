@@ -12,16 +12,16 @@ import FilterPanel from "../components/FilterPanel";
 import FoodItemRow from "../components/FoodItemRow";
 import AddFoodForm from "../components/AddFoodForm";
 
-const NEXT_SORT: Record<SortOrder, SortOrder> = { 
-  none: "asc", 
-  asc: "desc", 
-  desc: "none" 
+const NEXT_SORT: Record<SortOrder, SortOrder> = {
+  none: "asc",
+  asc: "desc",
+  desc: "none"
 };
 
 const SORT_LABELS: Record<SortOrder, string> = {
   none: "Sort by date",
   asc: "Soonest first",
-  desc: "Latest first" 
+  desc: "Latest first"
 };
 
 /**
@@ -35,6 +35,7 @@ export default function FoodInventoryView() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [foodTypes, setFoodTypes] = useState<string[]>([]);
+  const [storageLocations, setStorageLocations] = useState<string[]>([]);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sort, setSort] = useState<SortOrder>("none");
   const [editingItem, setEditingItem] = useState<FoodItemSummary | null>(null);
@@ -45,13 +46,13 @@ export default function FoodInventoryView() {
   const sortActive = sort !== "none";
 
   const loadItems = useCallback(() => {
-    return fetchInventory(foodTypes, sort)
+    return fetchInventory(foodTypes, storageLocations, sort)
       .then((loadedItems) => {
         setItems(loadedItems);
         setErrorMessage(null);
       })
       .catch(() => setErrorMessage("Couldn't reach server"));
-  }, [foodTypes, sort]);
+  }, [foodTypes, storageLocations, sort]);
 
   useEffect(() => {
     loadItems();
@@ -71,6 +72,7 @@ export default function FoodInventoryView() {
 
   const applyFilter = (selected: string[]) => {
     setFoodTypes(selected);
+    setStorageLocations(selected);
     setFilterOpen(false);
   };
 
@@ -130,7 +132,10 @@ export default function FoodInventoryView() {
         </Pressable>
 
         {filterActive && (
-          <Pressable onPress={() => setFoodTypes([])}>
+          <Pressable onPress={() => {
+            setFoodTypes([])
+            setStorageLocations([])
+          }}>
             <Text style={styles.clearFilter}>Clear</Text>
           </Pressable>
         )}
@@ -157,7 +162,10 @@ export default function FoodInventoryView() {
           filterActive ? (
             <View style={styles.empty}>
               <Text style={styles.message}>No items found for this filter.</Text>
-              <Button title="Clear Filter" onPress={() => setFoodTypes([])} />
+              <Button title="Clear Filter" onPress={() => {
+                setFoodTypes([])
+                setStorageLocations([])
+              }} />
             </View>
           ) : (
             <View style={styles.empty}>
@@ -171,7 +179,7 @@ export default function FoodInventoryView() {
         style={[styles.addFoodButton]}
         onPress={() => setAddFoodOpen(true)}
       >
-        <Ionicons name="add" size={20} color="#FFFFFF"/>
+        <Ionicons name="add" size={20} color="#FFFFFF" />
         <Text style={styles.addFoodButtonText}>Add Food</Text>
       </Pressable>
 
@@ -184,12 +192,13 @@ export default function FoodInventoryView() {
       <FilterPanel
         visible={filterOpen}
         selectedFoodTypes={foodTypes}
+        selectedStorageLocations={storageLocations}
         onApply={applyFilter}
         onClose={() => setFilterOpen(false)}
       />
 
       {editingItem && (
-        <ExpirationDatePicker 
+        <ExpirationDatePicker
           item={editingItem}
           onSave={(date) => saveExpirationDate(editingItem, date)}
           onCancel={() => setEditingItem(null)}
@@ -291,10 +300,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#4B5563",
     marginBottom: 12
-  }, 
+  },
 
   sortButton: {
     marginLeft: "auto"
-  } 
+  }
 
 });

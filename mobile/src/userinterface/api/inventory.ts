@@ -12,11 +12,13 @@ export type FoodItemSummary = {
   status: ExpirationStatus;
 };
 
-export function fetchInventory(foodTypes: string[] = [], sort: SortOrder = "none"): Promise<FoodItemSummary[]> {
+export function fetchInventory(foodTypes: string[] = [], storageLocations: string[] = [], sort: SortOrder = "none"): Promise<FoodItemSummary[]> {
   const params: string[] = [];
 
   if (foodTypes.length > 0)
     params.push(`foodType=${encodeURIComponent(foodTypes.join(","))}`);
+  if (storageLocations.length > 0)
+    params.push(`storageLocation=${encodeURIComponent(storageLocations.join(","))}`);
   if (sort !== "none")
     params.push(`sort=${sort}`);
 

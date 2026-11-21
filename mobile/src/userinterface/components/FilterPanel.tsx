@@ -4,7 +4,8 @@ import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-nati
 type FilterPanelProps = {
     visible: boolean;
     selectedFoodTypes: string[];
-    onApply: (foodTypes: string[]) => void;
+    selectedStorageLocations: string[];
+    onApply: (foodTypes: string[], storageLocations: string[]) => void;
     onClose: () => void;
 };
 
@@ -25,12 +26,25 @@ export const FOOD_TYPES: FilterOption[] = [
     { key: 'other', label: 'Other' },
 ];
 
-export default function FilterPanel({ visible, selectedFoodTypes, onApply, onClose }: FilterPanelProps) {
+export const STORAGE_LOCATIONS: FilterOption[] = [
+    { key: 'refrigerator', label: 'Refrigerator' },
+    { key: 'freezer', label: 'Freezer' },
+    { key: 'pantry', label: 'Pantry' },
+    { key: 'countertop', label: 'Countertop' },
+    { key: 'cabinet', label: 'Cabinet' },
+    { key: 'other', label: 'Other' },
+];
+
+export default function FilterPanel({ visible, selectedFoodTypes, selectedStorageLocations, onApply, onClose }: FilterPanelProps) {
     const [draftFoodTypes, setDraftFoodTypes] = useState<string[]>(selectedFoodTypes);
+    const [draftStorageLocations, setDraftStorageLocations] = useState<string[]>(selectedStorageLocations);
 
     useEffect(() => {
-        if (visible) setDraftFoodTypes(selectedFoodTypes);
-    }, [visible, selectedFoodTypes]);
+        if (visible) {
+            setDraftFoodTypes(selectedFoodTypes)
+            setDraftStorageLocations(selectedStorageLocations)
+        };
+    }, [visible, selectedFoodTypes, selectedStorageLocations]);
 
     return (
         <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
@@ -38,7 +52,10 @@ export default function FilterPanel({ visible, selectedFoodTypes, onApply, onClo
             <View style={styles.sheet}>
                 <View style={styles.header}>
                     <Text style={styles.title}>Filter</Text>
-                    <Pressable onPress={() => setDraftFoodTypes([])}>
+                    <Pressable onPress={() => {
+                        setDraftFoodTypes([])
+                        setDraftStorageLocations([])
+                    }}>
                         <Text style={styles.clearAll}>Clear all</Text>
                     </Pressable>
                 </View>
@@ -51,9 +68,17 @@ export default function FilterPanel({ visible, selectedFoodTypes, onApply, onClo
                         onChange={setDraftFoodTypes}
                     />
                     {/* US5: a "Location" FilterSection goes here */}
+                    <FilterSection
+                        title="Storage location"
+                        options={STORAGE_LOCATIONS}
+                        selected={draftStorageLocations}
+                        onChange={setDraftStorageLocations}
+                    />
                 </ScrollView>
 
-                <Pressable style={styles.applyButton} onPress={() => onApply(draftFoodTypes)}>
+                <Pressable style={styles.applyButton} onPress={() => {
+                    onApply(draftFoodTypes, draftStorageLocations)
+                }}>
                     <Text style={styles.applyButtonText}>Show results</Text>
                 </Pressable>
             </View>
